@@ -1,3 +1,10 @@
+resource "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = ["sts.amazonaws.com"]
+  thumbprint_list = ["6938fd4d98e9a3b8a5b1baba04a40f10a11123d6"]
+}
+
 resource "aws_iam_role" "github_actions_role" {
   name = "GithubActionsRole"
 
@@ -7,9 +14,14 @@ resource "aws_iam_role" "github_actions_role" {
       {
         Effect = "Allow",
         Principal = {
-          Service = "ec2.amazonaws.com"  # Modify as needed for other services
+          Federated = aws_iam_openid_connect_provider.github.arn
         },
-        Action = "sts:AssumeRole"
+        Action = "sts:AssumeRole",
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:sub" = "repo:aramYnwa/rsschool-devops-course-tasks:*"
+          }
+        }
       }
     ]
   })
