@@ -15,26 +15,38 @@ resource "aws_iam_role" "github_actions_role" {
   })
 }
 
-resource "aws_iam_role_policy" "github_actions_inline_policy" {
-  name = "GithubActionsInlinePolicy"
-  role = aws_iam_role.github_actions_role.id
+# Attach Managed Policies to the Role
+resource "aws_iam_role_policy_attachment" "attach_ec2" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+}
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ec2:*",       # AmazonEC2FullAccess
-          "route53:*",   # AmazonRoute53FullAccess
-          "s3:*",        # AmazonS3FullAccess
-          "iam:*",       # IAMFullAccess
-          "vpc:*",       # AmazonVPCFullAccess
-          "sqs:*",       # AmazonSQSFullAccess
-          "events:*"     # AmazonEventBridgeFullAccess
-        ],
-        Resource = "*"
-      }
-    ]
-  })
+resource "aws_iam_role_policy_attachment" "attach_route53" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "attach_s3" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "attach_iam" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "attach_vpc" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonVPCFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "attach_sqs" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "attach_eventbridge" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess"
 }
