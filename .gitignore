@@ -12,6 +12,5 @@ terraform.tfstate.*
 *.tfplan
 
 # Local environment files
-*.tfvars
 *.tfvars.json
 
