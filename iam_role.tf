@@ -32,7 +32,7 @@ resource "aws_iam_role" "github_actions_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "policy_attachments" {
-  for_each = toMap({
+  for_each = tomap({
     ec2       = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
     route53   = "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
     s3        = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
